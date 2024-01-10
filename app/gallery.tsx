@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "boring-avatars";
 import {
   FaRegCircleXmark,
@@ -12,14 +12,20 @@ import {
 import Modal from "./modal";
 
 import { User } from "./types/user";
+import { Hero } from "./types/dota";
 
 export type GalleryProps = {
   users: User[];
+  heroes: Hero[]
 };
-const Gallery = ({ users }: GalleryProps) => {
+const Gallery = ({ users, heroes }: GalleryProps) => {
   const [usersList, setUsersList] = useState(users);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setUsersList(users)
+  }, [users])
 
   const handleModalOpen = (id: number) => {
     const user = usersList.find((item) => item.id === id) || null;
@@ -56,6 +62,10 @@ const Gallery = ({ users }: GalleryProps) => {
             <div className="info">
               <div className="name">{user.name}</div>
               <div className="company">{user.company.name}</div>
+              <div className="hero">
+                Your random Dota Hero is:{' '}
+                {heroes[Math.floor(Math.random()*heroes.length)] ? heroes[Math.floor(Math.random()*heroes.length)]?.localized_name: '...'}
+                </div>
             </div>
           </div>
         ))}
